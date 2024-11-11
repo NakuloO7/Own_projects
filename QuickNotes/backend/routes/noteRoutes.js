@@ -49,48 +49,150 @@ router.post("/create", authMiddleware, async (req, res) => {
 });
 
 //update notes
+router.post("/update/:noteId", authMiddleware, async (req, res) => {
+  try {
+    const {noteId} = req.params;
+
+    const user = await User.findOne({
+      _id: req.userId,
+    });
+
+    if (!user) {
+      res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    //check if the given noteId is present in notes array inside user
+    if(!user.notes.includes(noteId)){
+      return res.status(403).json({
+        message: "This note does not belong to this user",
+      });
+    }
+
+    const updatedNote = await Notes.findOneAndUpdate({
+      _id : noteId
+    },{
+      title : req.body.title,
+      content : req.body.content
+    }, {
+      new : true
+    })
+
+    if (!updatedNote) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    return res.status(200).json({
+      message : "Note updated sucessfully",
+      note : {
+        title : updatedNote.title,
+        content : updatedNote.content
+      }
+    })
+
+  } catch (err) {
+    return res.status(411).json({
+      message: "Unable to update the data",
+    });
+  }
+});
 
 //read all notes
 router.get("/read", authMiddleware, async (req, res) => {
-  //find the user which has logged in
-  const findUser = await User.findOne({
-    _id: req.userId,
-  });
-
-  // console.log("Inside the read route" + findUser)
-  // if we found the user
-  // we have an array ids of all the notes created by that user
-  const idArray = findUser.notes;
-  console.log(idArray);
-  console.log(idArray[0]);
-
-  for(const id of idArray){
-    const allNotes = await Notes.findOne({
-        _id : id
+  try {
+    //find the user which has logged in
+    const findUser = await User.findOne({
+      _id: req.userId,
     });
-    console.log(allNotes.title);
-    console.log(allNotes.content);
+
+    if (!findUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // if we found the user
+    // we have an array ids of all the notes created by that user
+    const idArray = findUser.notes;
+    //here we have the notes array(ids) which is present in User database
+    //we have to fetch all the notes present at that ids from the Notes database
+
+    const notesArray = await Notes.find({ _id: { $in: idArray } }); //this will fetch all the notes in single database call
+    const formattedNotes = notesArray.map((note) => ({
+      title: note.title,
+      content: note.content,
+    }));
+
+    return res.status(200).json({
+      formattedNotes,
+    });
+  } catch (err) {
+    return res.status(411).json({
+      message: "Unable to fetch the data",
+    });
   }
-
-//   const noteF = await Notes.findOne({
-//     _id: idArray[0],
-//   });
-//   console.log(noteF);
-//   console.log(noteF.title);
-//   console.log(noteF.content);
-
-  /*
-    const notes = await User.findById(req.userId).populate({
-        path : 'notes',
-        select : 'title content'
-    })
-    */
-
-  res.json({
-    message: "User found",
-  });
 });
 
 //delete notes
 
+router.delete("/delete/:noteId", authMiddleware, async (req, res) => {
+  try {
+    const { noteId } = req.params;
+    console.log(noteId);
+    //find the user first
+    const user = await User.findOne({
+      _id: req.userId,
+    });
+
+    if (!user) {
+      res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    //check if the note id is present in the user's note array
+    if (!user.notes.includes(noteId)) {
+      return res.status(403).json({
+        message: "This note does not belong to this user",
+      });
+    }
+
+    //delete this note form the Note's Collection
+    const deleteNote = await Notes.findOneAndDelete({
+      _id: noteId,
+    });
+
+    if (!deleteNote) {
+      return res.status(404).json({
+        message: "Note not found",
+      });
+    }
+
+    //now as we have deleted the note from the Notes collection
+    //we need to remove that noteId form the Users collection
+    user.notes = user.notes.filter((id) => id.toString() !== noteId);
+    await user.save();
+
+    return res.status(200).json({
+      message: "Note deleted Sucessfully",
+    });
+  } catch (err) {
+    return res.status(411).json({
+      message: "Unable to delete the data",
+    });
+  }
+});
+
 module.exports = router;
+
+//one way to fetch all the notes
+// for (const id of idArray) {
+//   const allNotes = await Notes.findOne({
+//     _id: id,
+//   });
+//   if (allNotes) {
+//     notesArray.push({
+//       title: allNotes.title,
+//       content: allNotes.content,
+//     });
+//   }
+// }
