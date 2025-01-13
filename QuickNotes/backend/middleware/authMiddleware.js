@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const {JWT_SECRET} = require("../config");
+const { JWT_SECRET } = require("../config");
 
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.userId = decoded.userId;   //now this value can be accesed by the routes which uses this middleware
+    req.userId = decoded.userId; //now this value can be accesed by the routes which uses this middleware
     next();
 
     //this token was created in sign in route
@@ -28,14 +28,13 @@ const authMiddleware = (req, res, next) => {
 
     // Here, req.userId is assigned the user value from the decoded token payload.
     // This way, subsequent middleware and routes can access req.userId to identify the user associated with this request.
-  } catch (err){
+  } catch (err) {
     res.status(403).json({
-        message : "Error validating the current user"
-    })
+      message: "Error validating the current user",
+    });
   }
 };
 
-
 module.exports = {
-    authMiddleware
-}
+  authMiddleware,
+};

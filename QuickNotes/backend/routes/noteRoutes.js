@@ -51,7 +51,7 @@ router.post("/create", authMiddleware, async (req, res) => {
 //update notes
 router.post("/update/:noteId", authMiddleware, async (req, res) => {
   try {
-    const {noteId} = req.params;
+    const { noteId } = req.params;
 
     const user = await User.findOne({
       _id: req.userId,
@@ -64,33 +64,36 @@ router.post("/update/:noteId", authMiddleware, async (req, res) => {
     }
 
     //check if the given noteId is present in notes array inside user
-    if(!user.notes.includes(noteId)){
+    if (!user.notes.includes(noteId)) {
       return res.status(403).json({
         message: "This note does not belong to this user",
       });
     }
 
-    const updatedNote = await Notes.findOneAndUpdate({
-      _id : noteId
-    },{
-      title : req.body.title,
-      content : req.body.content
-    }, {
-      new : true
-    })
+    const updatedNote = await Notes.findOneAndUpdate(
+      {
+        _id: noteId,
+      },
+      {
+        title: req.body.title,
+        content: req.body.content,
+      },
+      {
+        new: true,
+      }
+    );
 
     if (!updatedNote) {
       return res.status(404).json({ message: "Note not found" });
     }
 
     return res.status(200).json({
-      message : "Note updated sucessfully",
-      note : {
-        title : updatedNote.title,
-        content : updatedNote.content
-      }
-    })
-
+      message: "Note updated sucessfully",
+      note: {
+        title: updatedNote.title,
+        content: updatedNote.content,
+      },
+    });
   } catch (err) {
     return res.status(411).json({
       message: "Unable to update the data",
@@ -137,7 +140,7 @@ router.get("/read", authMiddleware, async (req, res) => {
 router.delete("/delete/:noteId", authMiddleware, async (req, res) => {
   try {
     const { noteId } = req.params;
-    console.log(noteId);
+    // console.log(noteId);
     //find the user first
     const user = await User.findOne({
       _id: req.userId,

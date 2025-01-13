@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-box {
+  margin-bottom: 2rem;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-bar::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-bar:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.location-box {
+  text-align: center;
+  color: #fff;
+}
+
+.location {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.date {
+  font-size: 1rem;
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.weather-box {
+  text-align: center;
+}
+
+.temp {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.weather {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  display: inline-block;
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 1.5rem;
+  }
+
+  .location {
+    font-size: 1.5rem;
+  }
+
+  .temp {
+    font-size: 3.5rem;
+  }
+
+  .weather {
+    font-size: 1.2rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.location-box, .weather-box {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Weather-specific font color adjustments */
+.weather-clear .location, .weather-clear .temp, .weather-clear .weather {
+  color: #333333; /* Dark gray for clear/sunny weather */
+}
+
+.weather-rain .location, .weather-rain .temp, .weather-rain .weather {
+  color: #1C1C1C; /* Very dark gray for rain */
+}
+
+.weather-clouds .location, .weather-clouds .temp, .weather-clouds .weather {
+  color: #2C2C2C; /* Medium gray for cloudy weather */
+}
+
+.weather-snow .location, .weather-snow .temp, .weather-snow .weather {
+  color: #1A1A1A; /* Dark gray for snowy weather */
+}
+
+.weather-drizzle .location, .weather-drizzle .temp, .weather-drizzle .weather {
+  color: #3C3C3C; /* Dark gray for drizzle */
+}
+
+.weather-thunderstorm .location, .weather-thunderstorm .temp, .weather-thunderstorm .weather {
+  color: #ffffff; /* White text for thunderstorm */
+}
+
+.weather-mist .location, .weather-mist .temp, .weather-mist .weather {
+  color: #404040; /* Medium dark gray for misty weather */
+}
