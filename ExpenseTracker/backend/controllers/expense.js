@@ -79,7 +79,7 @@ const markAsDoneOrUndone = async (req, res)=>{
         }
 
         return res.status(200).json({
-            meassage :`Expense marked as ${expense.done ? "done" : "undone"}`,
+            message :`Expense marked as ${expense.done ? "done" : "undone"}`,
             success : true
         })
 
@@ -94,7 +94,7 @@ const removeExpense = async(req, res) =>{
 
         await  Expense.findByIdAndDelete(expenseId);
         return res.status(200).json({
-            meassage :`Expense removed`,
+            message :"Expense removed",
             success : true
         })
     }catch(e){
@@ -114,7 +114,7 @@ const updateExpense = async(req, res)=>{
         const expense = await Expense.findByIdAndUpdate(expenseId, udpateData, {new : true});
 
         return res.status(200).json({
-            meassage :`Expense updated`,
+            message :`Expense updated`,
             expense,
             success : true
         })
