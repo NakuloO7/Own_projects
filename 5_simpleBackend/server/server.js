@@ -10,8 +10,6 @@ const userRouter = require('../routes/user');  //this is the route we have impor
 app.use(bodyParser.json());  //use to parse json object form the HTTP request body
 app.use('/user', userRouter);
 
-
-
 const port = 3000;
 
 app.listen(port, ()=>{
