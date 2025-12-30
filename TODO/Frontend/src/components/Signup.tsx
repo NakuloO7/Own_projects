@@ -1,32 +1,24 @@
-import { useState } from "react";
+import { signupApi } from "../api/auth";
+import AuthForm from "./AuthForm";
+
+export default function Signin(){
 
 
-function Signup(){
-    const [email, setEmail] = useState("");
-    const [password, setPassword]= useState("");
-
-    const handleSubmit = ()=>{
-        console.log("Email", email);
-        console.log("Password", password);
+    const handleSubmit = async(email : string, password : string)=>{
+        try {
+            await signupApi(email, password);
+            alert("Signup successfull!")
+        } catch (error) {
+            alert("Signup failed!");
+            console.error(error)
+        }
     }
-
-
+       
     return (
-        <div>
-            <h2>Sign Up</h2>
-
-            <input onChange={(e)=>{
-                setEmail(e.target.value)
-            }} value={email} placeholder="Email" id="" />
-            
-            <input type="password" value={password} onChange={(e)=>{
-                setPassword(e.target.value)
-            }} />
-
-            <button onClick={handleSubmit}>SignUp</button>
-        </div>
+        <AuthForm
+        title="Signup"
+        buttonText="Signup"
+        onSubmit={handleSubmit}/>
     )
 
 }
-
-export default Signup;
