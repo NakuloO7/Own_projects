@@ -25,12 +25,11 @@ router.post('/', async(req : Request, res : Response)=>{
         })
 
         res.status(200).json({
-            message : "todo added!",
             todo
         })
         
     } catch (error) {
-        console.log("Error in the post todo route!");
+        console.log("Error in the post todo route!", error);
         res.status(401).json({
             ERROR : "Error in the post todo route!"
         })
@@ -51,7 +50,7 @@ router.get('/', async(req : Request, res : Response)=>{
             todos
         })
     } catch (error) {
-        console.log("Error in the get todo route!");
+        console.log("Error in the get todo route!", error);
         res.status(401).json({
             ERROR : "Error in the get todo route!"
         })
@@ -73,13 +72,12 @@ router.put('/:id', async(req : Request, res : Response)=>{
         })
 
         res.status(200).json({
-            message : "Todo updated!",
             updateTodo
         })
 
 
     }catch (error) {
-        console.log("Error in the update todo route!");
+        console.log("Error in the update todo route!", error);
         res.status(401).json({
             ERROR : "Error in the update todo route!"
         })
@@ -96,10 +94,14 @@ router.delete('/:id', async(req : Request, res : Response)=>{
             }
         })
 
+        res.status(200).json({
+            message: "todo deleted!"
+        })
+
     }catch (error) {
-        console.log("Error in the update todo route!");
+        console.log("Error in the delete todo route!", error);
         res.status(401).json({
-            ERROR : "Error in the update todo route!"
+            ERROR : "Error in the delete todo route!"
         })
     }
 })

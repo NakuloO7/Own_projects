@@ -44,7 +44,7 @@ router.post('/signin', async(req : Request, res : Response)=>{
             })
         };
 
-        const verify = await bcrypt.compare(existingUser?.password, password);
+        const verify = await bcrypt.compare(password, existingUser.password);
         if(!verify){
             return res.status(401).json({
                 message : "Unauthorised User!"
@@ -52,7 +52,6 @@ router.post('/signin', async(req : Request, res : Response)=>{
         }
         const token = jwt.sign({userId : existingUser.id}, process.env.JWT_SECRET!);
         res.status(200).json({
-            message : "User logged in!",
             token
         })
     } catch (error) {
