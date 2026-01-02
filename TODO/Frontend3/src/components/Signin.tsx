@@ -2,12 +2,18 @@ import { signin } from "../api/auth";
 import AuthForm from "./Authform";
 
 
-export default function Signin () {
+interface SigninPrpos{
+    onLoginSuccess : ()=>void;
+}
+
+
+export default function Signin ({onLoginSuccess} : SigninPrpos) {
 
     const handleSignin = async(email : string, password : string) =>{
        try {
           const data = await signin(email, password);
-          localStorage.setItem("token", data.token)
+          localStorage.setItem("token", data.token);
+          onLoginSuccess();
        } catch (error) {
         console.log("Error in Signin", error);
         alert("Enable to Signin!")
@@ -18,3 +24,5 @@ export default function Signin () {
         <AuthForm title="Signin" onSubmit={handleSignin}/>
     )
 }
+
+

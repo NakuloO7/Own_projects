@@ -12,7 +12,7 @@ const getToken = ()=>{
 }
 
 //create
-const createTodo = async(title : string) : Promise<Todo> =>{
+export const createTodo = async(title : string) : Promise<Todo> =>{
     const response = await axios.post<{todo : Todo}>(`${BASE_URL}/api/todo/`, {title}, {
         headers : {
             Authorization : getToken()
@@ -24,7 +24,7 @@ const createTodo = async(title : string) : Promise<Todo> =>{
 
 //read
 
-const getTodos = async() : Promise<Todo[]> =>{
+export const getTodos = async() : Promise<Todo[]> =>{
     const response = await axios.get<{todos: Todo[]}>(`${BASE_URL}/api/todo/`, {
         headers : {
             Authorization : getToken()
@@ -36,7 +36,7 @@ const getTodos = async() : Promise<Todo[]> =>{
 
 //update
 
-const updateTodo = async(id : string, completed : string) : Promise<Todo> =>{
+export const updateTodo = async(id : string, completed : string) : Promise<Todo> =>{
     const response = await axios.put<{todo: Todo}>(`${BASE_URL}/api/todo/${id}`, {completed}, {
         headers : {
             Authorization : getToken()
@@ -48,7 +48,7 @@ const updateTodo = async(id : string, completed : string) : Promise<Todo> =>{
 
 //delete
 
-const deleteTodo = async(id : string) : Promise<void> =>{
+export const deleteTodo = async(id : string) : Promise<void> =>{
     await axios.delete(`${BASE_URL}/api/todo/${id}`, {
         headers : {
             Authorization : getToken()
