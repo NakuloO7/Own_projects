@@ -1,34 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useAppSelector } from './hooks/useAppSelector';
+import { useEffect } from 'react';
+import { fetchProduct, setSearch } from './features/products/productSlice';
+import { useAppDispatch } from './hooks/useAppDispatch';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useAppDispatch();
+
+  //reading state from redux
+  const {products, loading, error, search} = useAppSelector(
+    (state)=>state.products
+  )
+  console.log("this are the products", products);
+
+  useEffect(()=>{
+    dispatch(fetchProduct());
+  }, [dispatch]);
+
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setSearch(e.target.value));
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <h1>Product Dashboard</h1>
+      {loading &&  <p>Loading products..</p>}
+      {error && <p>Error...</p>}
+
+      <input type="text" placeholder='Search Products' value={search} onChange={handleSearch} />
+
+      <ul>{
+        products.map((product)=>(
+          <li key={product.id}>{product.name} - ${product.price}</li>
+        ))
+      }</ul>
+    </div>
   )
 }
 
